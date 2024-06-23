@@ -60,3 +60,60 @@ app.get("/api/ventas/:cliente", (req, res) => {
     }
   );
 });
+
+//Borramos una venta
+app.delete("/api/ventas/:id", (req, res) => {
+  conexion.query(
+    "DELETE FROM Ventas WHERE id = ?",
+    [req.params.id],
+    (error, filas) => {
+      if (error) {
+        throw error;
+      } else {
+        res.send(filas);
+      }
+    }
+  );
+});
+
+//Agregamos una nueva venta
+app.post("/api/ventas", (req, res) => {
+  const venta = {
+    cliente: req.body.cliente,
+    telefono: req.body.telefono,
+    recibido: req.body.recibido,
+    entrega: req.body.entrega,
+    precio: req.body.precio,
+  };
+  const sql = "INSERT INTO Ventas SET ?";
+  conexion.query(sql, venta, (error, filas) => {
+    if (error) {
+      throw error;
+    } else {
+      res.send(filas);
+    }
+  });
+});
+
+//Actualizar una venta
+app.put("/api/ventas/:id", (req, res) => {
+  const id = req.params.id;
+  const cliente = req.body.cliente;
+  const telefono = req.body.telefono;
+  const recibido = req.body.recibido;
+  const entrega = req.body.entrega;
+  const precio = req.body.precio;
+  const sql =
+    "UPDATE Ventas SET cliente = ?, telefono = ?, recibido = ?, entrega = ?, precio = ?";
+  conexion.query(
+    sql,
+    [cliente, telefono, recibido, entrega, precio, id],
+    (error, filas) => {
+      if (error) {
+        throw error;
+      } else {
+        res.send(filas);
+      }
+    }
+  );
+});
