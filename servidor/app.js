@@ -34,3 +34,29 @@ app.listen(puerto, () => {
 app.get("/", (req, res) => {
   res.send("Bienvenido a Node js");
 });
+
+//Consulta de toda la tabla de ventas
+app.get("/api/ventas", (req, res) => {
+  conexion.query("SELECT * FROM Ventas", (error, filas) => {
+    if (error) {
+      throw error;
+    } else {
+      res.send(filas);
+    }
+  });
+});
+
+//Consulta a un cliente en especifico
+app.get("/api/ventas/:cliente", (req, res) => {
+  conexion.query(
+    "SELECT * FROM Ventas WHERE cliente = ?",
+    [req.params.cliente],
+    (error, filas) => {
+      if (error) {
+        throw error;
+      } else {
+        res.send(filas);
+      }
+    }
+  );
+});
