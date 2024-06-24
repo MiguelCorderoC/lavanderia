@@ -1,0 +1,18 @@
+.art-encabezado {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  gap: 1em;
+}
+
+.art-opciones {
+  display: flex;
+  justify-content: space-between;
+  gap: 1em;
+}
+
+.th-acciones {
+  display: flex;
+  gap: 1em;
+  justify-content: center;
+}
