@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import "./css/HomeView.css";
-import VentaAgregar from "../components/VentaAgregar";
 
 function HomeView() {
   const [ventas, setVentas] = useState([]);
@@ -22,7 +21,6 @@ function HomeView() {
 
   return (
     <>
-      <VentaAgregar />
       <main className="container mt-5">
         <section className="card">
           <article className="card-header art-encabezado">
@@ -33,7 +31,9 @@ function HomeView() {
                 type="search"
                 placeholder="Buscar por nombre"
               />
-              <button className="btn btn-success">Agregar</button>
+              <Link to="/ventas/agregar" className="btn btn-success">
+                Agregar
+              </Link>
             </article>
           </article>
           <article className="card-body">

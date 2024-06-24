@@ -2,7 +2,13 @@
   background-color: pink;
   border: 1px solid red;
   border-radius: 5px;
+  padding: 0.3em 1em;
 }
 .div-guardar {
+  text-align: center;
+}
+
+.h4-mensaje-error,
+.h4-mensaje-exito {
   text-align: center;
 }

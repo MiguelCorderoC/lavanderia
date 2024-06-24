@@ -1,8 +1,11 @@
 import axios from "axios";
-import "./css/VentaAgregar.css";
-
+import { useState } from "react";
+import "./css/VentaAgregarView.css";
+import { Link } from "react-router-dom";
 function VentaAgregar() {
-  const handleSubmit = async (event) => {
+  const [mensaje, setMensaje] = useState(0);
+
+  const guardarVenta = async (event) => {
     event.preventDefault();
 
     const cliente = event.target.elements.cliente.value;
@@ -30,21 +33,36 @@ function VentaAgregar() {
       );
 
       console.log("Respuesta del servidor:", response.data);
+      setMensaje(1);
     } catch (error) {
       console.error("Error al hacer POST a la API:", error);
+      setMensaje(2);
     }
+    setTimeout(() => {
+      setMensaje(0);
+    }, 5000);
   };
 
   return (
     <>
       <section className="container">
+        {mensaje === 1 && (
+          <div className="mb-2 alert alert-success">
+            <h4 className="h4-mensaje-exito">Venta agregada con éxito</h4>
+          </div>
+        )}
+        {mensaje === 2 && (
+          <div className="mb-2 alert alert-danger">
+            <h4 className="h4-mensaje-error">Error al agregar la venta</h4>
+          </div>
+        )}
         <article className="card">
           <article className="card-header art-encabezado">
             <h4>Agregar venta</h4>
-            <button className="bi bi-x-lg text-danger btn-salir"></button>
+            <Link to="/" className="bi bi-x-lg text-danger btn-salir"></Link>
           </article>
           <article className="card-body">
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={guardarVenta}>
               <div className="mb-3">
                 <span>Cliente</span>
                 <input className="form-control" type="text" name="cliente" />
