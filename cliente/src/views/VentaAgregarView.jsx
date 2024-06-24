@@ -2,7 +2,9 @@ import axios from "axios";
 import { useState } from "react";
 import "./css/VentaAgregarView.css";
 import { Link } from "react-router-dom";
-function VentaAgregar() {
+import jsPDF from "jspdf";
+
+function VentaAgregarView() {
   const [mensaje, setMensaje] = useState(0);
 
   const guardarVenta = async (event) => {
@@ -34,6 +36,9 @@ function VentaAgregar() {
 
       console.log("Respuesta del servidor:", response.data);
       setMensaje(1);
+
+      // Generar PDF después de guardar la venta
+      generarPDF(nuevaVenta);
     } catch (error) {
       console.error("Error al hacer POST a la API:", error);
       setMensaje(2);
@@ -43,9 +48,24 @@ function VentaAgregar() {
     }, 5000);
   };
 
+  const generarPDF = (venta) => {
+    const doc = new jsPDF();
+
+    doc.text("Datos de la venta:", 10, 10);
+    doc.text(`Cliente: ${venta.cliente}`, 10, 20);
+    doc.text(`Servicio: ${venta.servicio}`, 10, 30);
+    doc.text(`Piezas: ${venta.pieza}`, 10, 40);
+    doc.text(`Recibido: ${venta.recibido}`, 10, 50);
+    doc.text(`Entrega: ${venta.entrega}`, 10, 60);
+    doc.text(`Teléfono: ${venta.telefono}`, 10, 70);
+    doc.text(`Precio: ${venta.precio}`, 10, 80);
+
+    doc.save("venta.pdf");
+  };
+
   return (
     <>
-      <section className="container">
+      <section className="container mt-5">
         {mensaje === 1 && (
           <div className="mb-2 alert alert-success">
             <h4 className="h4-mensaje-exito">Venta agregada con éxito</h4>
@@ -104,4 +124,4 @@ function VentaAgregar() {
   );
 }
 
-export default VentaAgregar;
+export default VentaAgregarView;
