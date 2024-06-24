@@ -80,6 +80,8 @@ app.delete("/api/ventas/:id", (req, res) => {
 app.post("/api/ventas", (req, res) => {
   const venta = {
     cliente: req.body.cliente,
+    pieza: req.body.pieza,
+    servicio: req.body.servicio,
     telefono: req.body.telefono,
     recibido: req.body.recibido,
     entrega: req.body.entrega,
@@ -99,15 +101,17 @@ app.post("/api/ventas", (req, res) => {
 app.put("/api/ventas/:id", (req, res) => {
   const id = req.params.id;
   const cliente = req.body.cliente;
+  const pieza = req.body.pieza;
+  const servicio = req.body.servicio;
   const telefono = req.body.telefono;
   const recibido = req.body.recibido;
   const entrega = req.body.entrega;
   const precio = req.body.precio;
   const sql =
-    "UPDATE Ventas SET cliente = ?, telefono = ?, recibido = ?, entrega = ?, precio = ?";
+    "UPDATE Ventas SET cliente = ?, pieza = ?, servicio = ?, telefono = ?, recibido = ?, entrega = ?, precio = ?";
   conexion.query(
     sql,
-    [cliente, telefono, recibido, entrega, precio, id],
+    [cliente, pieza, servicio, telefono, recibido, entrega, precio, id],
     (error, filas) => {
       if (error) {
         throw error;
