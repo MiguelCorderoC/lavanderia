@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import "./css/HomeView.css";
+import VentaAgregar from "../components/VentaAgregar";
 
 function HomeView() {
   const [ventas, setVentas] = useState([]);
@@ -12,7 +13,7 @@ function HomeView() {
         const response = await axios.get("http://192.168.1.6:3000/api/ventas");
         setVentas(response.data);
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error("Error al establecer conexion con la API:", error);
       }
     };
 
@@ -21,6 +22,7 @@ function HomeView() {
 
   return (
     <>
+      <VentaAgregar />
       <main className="container mt-5">
         <section className="card">
           <article className="card-header art-encabezado">
