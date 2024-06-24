@@ -28,6 +28,7 @@ conexion.connect(function (error) {
 //Activamos el servidor
 app.listen(puerto, () => {
   console.log("Servidor activo desde http://localhost:3000");
+  console.log("O tambien desde http://192.168.1.6:3000");
 });
 
 //Primera ruta de acceso
