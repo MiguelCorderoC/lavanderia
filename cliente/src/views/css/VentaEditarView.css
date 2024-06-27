@@ -1,3 +1,6 @@
 .art-actualizar {
   text-align: center;
 }
+.art-encabezado {
+  display: flex;
+}

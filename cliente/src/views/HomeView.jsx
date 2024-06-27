@@ -7,6 +7,7 @@ function HomeView() {
   const [ventas, setVentas] = useState([]);
   const [confirmacionVisible, setConfirmacionVisible] = useState(false);
   const [ventaAEliminar, setVentaAEliminar] = useState(null);
+  const [terminoBusqueda, setTerminoBusqueda] = useState("");
 
   const eliminarVenta = async (id) => {
     try {
@@ -43,6 +44,19 @@ function HomeView() {
     setConfirmacionVisible(false);
     setVentaAEliminar(null);
   };
+
+  const formatearFecha = (fecha) => {
+    const fechaObj = new Date(fecha);
+    const diaSemana = fechaObj.toLocaleString("es-ES", { weekday: "long" });
+    const dia = String(fechaObj.getDate()).padStart(2, "0");
+    const mes = String(fechaObj.getMonth() + 1).padStart(2, "0");
+    const anio = fechaObj.getFullYear();
+    return `${diaSemana}, ${dia}/${mes}/${anio}`;
+  };
+
+  const ventasFiltradas = ventas.filter((venta) =>
+    venta.cliente.toLowerCase().includes(terminoBusqueda.toLowerCase())
+  );
 
   return (
     <>
@@ -81,6 +95,8 @@ function HomeView() {
                 className="form-control"
                 type="search"
                 placeholder="Buscar por nombre"
+                value={terminoBusqueda}
+                onChange={(e) => setTerminoBusqueda(e.target.value)}
               />
               <Link to="/ventas/agregar" className="btn btn-success">
                 Agregar
@@ -104,14 +120,14 @@ function HomeView() {
                   </tr>
                 </thead>
                 <tbody>
-                  {ventas.map((venta) => (
+                  {ventasFiltradas.map((venta) => (
                     <tr key={venta.id}>
                       <td>{venta.id}</td>
                       <td>{venta.cliente}</td>
                       <td>{venta.servicio}</td>
                       <td>{venta.pieza} pzs</td>
-                      <td>{venta.recibido}</td>
-                      <td>{venta.entrega}</td>
+                      <td>{formatearFecha(venta.recibido)}</td>
+                      <td>{formatearFecha(venta.entrega)}</td>
                       <td>{venta.telefono}</td>
                       <td>${venta.precio}</td>
                       <td className="th-acciones">

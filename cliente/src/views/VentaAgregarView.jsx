@@ -1,11 +1,13 @@
 import axios from "axios";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import "./css/VentaAgregarView.css";
 import { Link } from "react-router-dom";
 import jsPDF from "jspdf";
 
 function VentaAgregarView() {
   const [mensaje, setMensaje] = useState(0);
+  const [pdfUrl, setPdfUrl] = useState(null);
+  const pdfIframeRef = useRef(null);
 
   const guardarVenta = async (event) => {
     event.preventDefault();
@@ -37,8 +39,7 @@ function VentaAgregarView() {
       console.log("Respuesta del servidor:", response.data);
       setMensaje(1);
 
-      // Generar PDF después de guardar la venta
-      generarPDF(nuevaVenta);
+      previsualizarPDF(nuevaVenta);
     } catch (error) {
       console.error("Error al hacer POST a la API:", error);
       setMensaje(2);
@@ -48,10 +49,14 @@ function VentaAgregarView() {
     }, 5000);
   };
 
-  const generarPDF = (venta) => {
-    const doc = new jsPDF();
+  const previsualizarPDF = (venta) => {
+    const doc = new jsPDF({
+      orientation: "portrait",
+      unit: "mm",
+      format: "a4",
+    });
 
-    doc.text("Datos de la venta:", 10, 10);
+    doc.text("Datos de la venta:", 50, 10);
     doc.text(`Cliente: ${venta.cliente}`, 10, 20);
     doc.text(`Servicio: ${venta.servicio}`, 10, 30);
     doc.text(`Piezas: ${venta.pieza}`, 10, 40);
@@ -60,7 +65,17 @@ function VentaAgregarView() {
     doc.text(`Teléfono: ${venta.telefono}`, 10, 70);
     doc.text(`Precio: ${venta.precio}`, 10, 80);
 
-    doc.save("venta.pdf");
+    // Crear el Blob del PDF
+    const pdfBlob = doc.output("blob");
+
+    // Crear una URL para el Blob
+    const pdfUrl = URL.createObjectURL(pdfBlob);
+    setPdfUrl(pdfUrl);
+
+    // Scroll al iframe de previsualización
+    if (pdfIframeRef.current) {
+      pdfIframeRef.current.scrollIntoView({ behavior: "smooth" });
+    }
   };
 
   return (
@@ -119,6 +134,17 @@ function VentaAgregarView() {
             </form>
           </article>
         </article>
+        {pdfUrl && (
+          <div ref={pdfIframeRef} className="mt-5">
+            <h4>Previsualización del PDF:</h4>
+            <iframe
+              src={pdfUrl}
+              width="100%"
+              height="500px"
+              title="Previsualización PDF"
+            />
+          </div>
+        )}
       </section>
     </>
   );

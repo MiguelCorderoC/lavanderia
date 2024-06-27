@@ -3,6 +3,9 @@ import axios from "axios";
 import "./css/VentaEditarView.css";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
+import MensajeExito from "../components/MensajeExito";
+import MensajeError from "../components/MensajeError";
 
 function VentaEditarView() {
   const [venta, setVenta] = useState({
@@ -16,6 +19,8 @@ function VentaEditarView() {
     precio: "",
   });
   const [mostrarMensaje, setMostrarMensaje] = useState(false);
+  const [mostrarMensajeExito, setMostrarMensajeExito] = useState(false);
+  const [mostrarMensajeError, setMostrarMensajeError] = useState(false);
 
   const { id } = useParams();
 
@@ -31,13 +36,22 @@ function VentaEditarView() {
   };
 
   const actualizarVenta = () => {
+    setMostrarMensaje(false);
     axios
       .put(`http://192.168.1.8:3000/api/ventas/${venta.id}`, venta)
       .then((res) => {
         console.log("Venta actualizada exitosamente:", res.data);
+        setMostrarMensajeExito(true);
+        setTimeout(() => {
+          setMostrarMensajeExito(false);
+        }, 3000);
       })
       .catch((error) => {
         console.error("Error al actualizar la venta:", error);
+        setMostrarMensajeError(true);
+        setTimeout(() => {
+          setMostrarMensajeError(false);
+        }, 3000);
       });
   };
 
@@ -47,20 +61,23 @@ function VentaEditarView() {
 
   return (
     <>
+      {mostrarMensajeError && <MensajeError accion={"actualizar"} />}
+      {mostrarMensajeExito && <MensajeExito accion={"actualizacion"} />}
       {mostrarMensaje && (
         <MensajeConfirmacion
           accion="editar"
           fondo="primary"
           onAceptar={() => {
-            actualizarVenta;
+            actualizarVenta();
           }}
           onCancelar={() => setMostrarMensaje(false)}
         />
       )}
       <section className="container">
         <article className="card">
-          <article className="card-header">
+          <article className="card-header art-encabezado">
             <h4>Editar venta</h4>
+            <Link to="/" className="bi bi-x-lg text-danger btn-salir"></Link>
           </article>
           <article className="card-body">
             <div className="mb-3">
@@ -154,7 +171,7 @@ function VentaEditarView() {
                 onChange={(e) => setVenta({ ...venta, precio: e.target.value })}
               />
             </div>
-            <article className="art-actualizar">
+            <article className="card-footer art-actualizar">
               <button
                 className="btn btn-primary"
                 onClick={() => setMostrarMensaje(true)}
