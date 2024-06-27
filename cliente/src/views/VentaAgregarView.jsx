@@ -30,7 +30,7 @@ function VentaAgregarView() {
 
     try {
       const response = await axios.post(
-        "http://192.168.1.6:3000/api/ventas",
+        "http://192.168.1.8:3000/api/ventas",
         nuevaVenta
       );
 

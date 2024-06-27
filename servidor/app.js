@@ -28,7 +28,7 @@ conexion.connect(function (error) {
 //Activamos el servidor
 app.listen(puerto, () => {
   console.log("Servidor activo desde http://localhost:3000");
-  console.log("O tambien desde http://192.168.1.6:3000");
+  console.log("O tambien desde http://192.168.1.8:3000");
 });
 
 //Primera ruta de acceso
@@ -48,10 +48,10 @@ app.get("/api/ventas", (req, res) => {
 });
 
 //Consulta a un cliente en especifico
-app.get("/api/ventas/:cliente", (req, res) => {
+app.get("/api/ventas/:id", (req, res) => {
   conexion.query(
-    "SELECT * FROM Ventas WHERE cliente = ?",
-    [req.params.cliente],
+    "SELECT * FROM Ventas WHERE id = ?",
+    [req.params.id],
     (error, filas) => {
       if (error) {
         throw error;
@@ -109,7 +109,7 @@ app.put("/api/ventas/:id", (req, res) => {
   const entrega = req.body.entrega;
   const precio = req.body.precio;
   const sql =
-    "UPDATE Ventas SET cliente = ?, pieza = ?, servicio = ?, telefono = ?, recibido = ?, entrega = ?, precio = ?";
+    "UPDATE Ventas SET cliente = ?, pieza = ?, servicio = ?, telefono = ?, recibido = ?, entrega = ?, precio = ? WHERE id = ?";
   conexion.query(
     sql,
     [cliente, pieza, servicio, telefono, recibido, entrega, precio, id],

@@ -10,7 +10,7 @@ function HomeView() {
 
   const eliminarVenta = async (id) => {
     try {
-      await axios.delete(`http://192.168.1.6:3000/api/ventas/${id}`);
+      await axios.delete(`http://192.168.1.8:3000/api/ventas/${id}`);
       setVentas(ventas.filter((venta) => venta.id !== id));
       setConfirmacionVisible(false);
       setVentaAEliminar(null);
@@ -22,7 +22,7 @@ function HomeView() {
   useEffect(() => {
     const fetchVentas = async () => {
       try {
-        const response = await axios.get("http://192.168.1.6:3000/api/ventas");
+        const response = await axios.get("http://192.168.1.8:3000/api/ventas");
         setVentas(response.data);
       } catch (error) {
         console.error("Error al establecer conexión con la API:", error);
@@ -115,7 +115,10 @@ function HomeView() {
                       <td>{venta.telefono}</td>
                       <td>${venta.precio}</td>
                       <td className="th-acciones">
-                        <Link to="#" className="btn btn-primary">
+                        <Link
+                          to={"/ventas/" + venta.id + "/editar"}
+                          className="btn btn-primary"
+                        >
                           Editar
                         </Link>
                         <button
